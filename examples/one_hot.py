@@ -98,7 +98,7 @@ def one_hot_to_pretty_midi(one_hot, fs=100, program=1,bpm=120):
 
         if time >= last_beat_time + beat_interval:
             for note in current_notes:
-
+                pass
         time = time / fs
 
 

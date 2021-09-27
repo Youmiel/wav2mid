@@ -5,34 +5,29 @@ keras: CNN Transcription model
 '''
 #from __future__ import print_function
 import argparse
+import os
 
+import keras
 import matplotlib.pyplot as plt
-
-#keras utils
-from keras.callbacks import Callback
-from keras import metrics
-from keras.models import Model, load_model
-from keras.layers import Dense, Dropout, Flatten, Reshape, Input
-from keras.layers import Conv2D, MaxPooling2D, add
-from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard, CSVLogger
-from keras.layers.normalization import BatchNormalization
-from keras.layers import Activation
-from keras.optimizers import SGD
-from keras import backend as K
-from keras.utils import plot_model
-
-
-import tensorflow as tf
+import numpy as np
 import sklearn
+import tensorflow as tf
+from tensorflow.keras import backend as K
+from tensorflow.keras import metrics
+#keras utils
+from tensorflow.keras.callbacks import (Callback, CSVLogger, EarlyStopping,
+                             ModelCheckpoint, TensorBoard)
+from tensorflow.keras.layers import (Activation, Conv2D, Dense, Dropout, Flatten, Input,
+                          MaxPooling2D, Reshape, add)
+from keras.layers import BatchNormalization
+from keras.models import Model, load_model
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.utils import plot_model
 from sklearn.metrics import precision_recall_fscore_support
 
+from config import load_config
 #internal utils
 from preprocess import DataGen
-from config import load_config
-
-import numpy as np
-
-import os
 
 
 def opt_thresholds(y_true,y_scores):

@@ -16,7 +16,7 @@ def load_config(json_fn):
 def create_config(args):
     path = os.path.join('models',args['model_name'])
     if not os.path.exists(path):
-        os.mkdir(path)
+        os.makedirs(path, exist_ok=True)
     with open(os.path.join(path,'config.json'), 'w') as outfile:
         json.dump(args, outfile)
 

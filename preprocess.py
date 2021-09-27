@@ -17,6 +17,7 @@ import numpy as np
 import multiprocessing
 
 def readmm(d,args):
+    print('d is ', d)
     ipath = os.path.join(d,'input.dat')
     note_range = 88
     n_bins = int(args['bin_multiple']) * note_range
@@ -165,7 +166,7 @@ def mid2outputnp(pm_mid,times):
 def joinAndCreate(basePath,new):
     newPath = os.path.join(basePath,new)
     if not os.path.exists(newPath):
-        os.mkdir(newPath)
+        os.makedirs(newPath, exist_ok=True)
     return newPath
 
 def isSplitFolder(ddir):
@@ -194,6 +195,7 @@ def organize(args):
             else:
                 os.rename(os.path.join(dpath,ddir), os.path.join(train_path,ddir))
 
+<<<<<<< HEAD
 def modelDapathtaExists(path, s):
     dirs = ['val','test','train']
     for ddir in dirs:
@@ -242,6 +244,10 @@ def _preprocess(args, dp, dn, filenames):
             print("{} examples couldnt be processed".format(errCnt))
 
     return (inputs, outputs, addCnt, errCnt)
+=======
+
+data_dir = './maps/'   # why is it out of the folder
+>>>>>>> 17bc100 (Make it runnable under Python 3.9.)
 def preprocess(args):
     #params
     path = os.path.join('models',args['model_name'])
@@ -297,10 +303,14 @@ def preprocess(args):
             fn = subdir.split('/')[-1]
             if not fn:
                 fn = subdir.split('/')[-2]
+            print('fn is', fn)
             #fn += '.h5'
             # save inputs,outputs to hdf5 file
             datapath = joinAndCreate(path,'data')
             fnpath = joinAndCreate(datapath,fn)
+
+            print('datapath is', datapath)
+            print('fnpath is', fnpath)
 
             mmi = np.memmap(filename=os.path.join(fnpath,'input.dat'), mode='w+',shape=inputs.shape)
             mmi[:] = inputs[:]
