@@ -43,3 +43,10 @@ The design for the system is as follows:
 ## Data
 * [MAPS dataset](http://www.tsi.telecom-paristech.fr/aao/en/2010/07/08/maps-database-a-piano-database-for-multipitch-estimation-and-automatic-transcription-of-music/)
 * [Large MIDI collection](https://www.reddit.com/r/WeAreTheMusicMakers/comments/3ajwe4/the_largest_midi_collection_on_the_internet/)
+
+## Tips on understanding this repository (by Youmiel @ 2021-09-28)
+- Original dataset is outside of the repository folder, which is `"../maps/"`(this is a cleaner file structure but harder to figure out the whole project structure from my perspective), but **this fork** changed it to `"./maps/"` for easier debugging.
+- Since MAPS dataset is no longer available at this time(the file in [this part](##Data) is lost), it is suggested that using other dataset instead.
+- Training data should be placed in seperated folders, single file is not supported. e.g. `"./maps/folderA/musicA.mid & musicA.wav"` and `"./maps/folderB/musicB.mid & musicB.wav"` is supported, but `"./maps/something.mid & something.wav"` not.
+- Data folders prefixed with `"ENS"` is used as **test set**, the first data folder without `"ENS"` prefix is used as **evaluation set**, other data folders are used as **training set**.
+- Adding new models under current framework is not a pleasant job, the repository originally includes two kinds of neural network in [keras_train.py](./keras_train.py), see it for details.

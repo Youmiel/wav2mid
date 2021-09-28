@@ -111,8 +111,13 @@ def wav2inputnp(audio_fn,spec_type='cqt',bin_multiple=3):
 
     #down-sample,mono-channel
     y,_ = librosa.load(audio_fn,sr)
-    S = librosa.cqt(y,fmin=librosa.midi_to_hz(min_midi), sr=sr, hop_length=hop_length,
-                      bins_per_octave=bins_per_octave, n_bins=n_bins)
+    print('bins_per_octave: ',bins_per_octave, 'n_bins: ', n_bins)
+    S = librosa.cqt(y,
+        fmin=int(librosa.midi_to_hz(min_midi)), 
+        sr=sr, 
+        hop_length=hop_length,
+        bins_per_octave=bins_per_octave, 
+        n_bins=n_bins)
     S = S.T
 
     #TODO: LogScaleSpectrogram?
@@ -195,7 +200,6 @@ def organize(args):
             else:
                 os.rename(os.path.join(dpath,ddir), os.path.join(train_path,ddir))
 
-<<<<<<< HEAD
 def modelDapathtaExists(path, s):
     dirs = ['val','test','train']
     for ddir in dirs:
@@ -213,7 +217,7 @@ def _preprocess(args, dp, dn, filenames):
             audio_fn = f
             fprefix = audio_fn.split('.wav')[0]
             mid_fn = fprefix + '.mid'
-            txt_fn = fprefix + '.txt'
+            txt_fn = fprefix + '.txt'  # txt ?
             if mid_fn in filenames:
                 # wav2inputnp
                 audio_fn = os.path.join(dp,audio_fn)
@@ -222,7 +226,8 @@ def _preprocess(args, dp, dn, filenames):
 
                 pm_mid = pretty_midi.PrettyMIDI(mid_fn)
 
-                inputnp = wav2inputnp(audio_fn,spec_type=args['spec_type'],bin_multiple=args['bin_multiple'])
+                inputnp = wav2inputnp(audio_fn, spec_type=args['spec_type'],
+                    bin_multiple=int(args['bin_multiple']) ) # arg read from csv is of type str
                 times = librosa.frames_to_time(np.arange(inputnp.shape[0]),sr=sr,hop_length=hop_length)
                 outputnp = mid2outputnp(pm_mid,times)
 
@@ -243,17 +248,16 @@ def _preprocess(args, dp, dn, filenames):
             print("{} examples in dataset".format(addCnt))
             print("{} examples couldnt be processed".format(errCnt))
 
+    inputs = np.concatenate(inputs)
+    outputs = np.concatenate(outputs)
     return (inputs, outputs, addCnt, errCnt)
-=======
 
-data_dir = './maps/'   # why is it out of the folder
->>>>>>> 17bc100 (Make it runnable under Python 3.9.)
 def preprocess(args):
     #params
     path = os.path.join('models',args['model_name'])
     config = load_config(os.path.join(path,'config.json'))
 
-    pool=multiprocessing.Pool(args['threads'])
+    pool = multiprocessing.Pool(int(args['threads']))
 
 
     bin_multiple = int(args['bin_multiple'])
@@ -356,7 +360,7 @@ if __name__ == '__main__':
     parser.add_argument('model_name',
                         help='model name. will use config from directory and save preprocessed data to it')
 
-    parser.add_argument('data_dir', default='../maps/',
+    parser.add_argument('data_dir', default='./maps/',
                         help='Path to data dir, searched recursively, used for naming HDF5 file (default: %(default)s)')
 
     parser.add_argument('-b', dest='bin_multiple', type=int, default=4,
